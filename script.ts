@@ -50,6 +50,20 @@ function calculateAdminCash(data: any): number {
  */
 const query1 = {
 	//Write your code here
+	where: {
+		active: true,
+		createdAt: {
+			gte: new Date('2022-12-01T00:00:00.000Z'),
+			lte: new Date('2022-12-31T23:59:59.999Z')
+		},
+		classification: {
+			contains: 'logistics'
+		}
+	},
+	include: {
+		userWallet: true,
+		userWalletItem: false
+	}
 }
 
 /*  Part IV
