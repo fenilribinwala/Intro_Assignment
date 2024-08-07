@@ -72,6 +72,25 @@ const query1 = {
  */
 const query2 = {
 	//Write your code here
+	where: {
+		email: 'alex@movingcompany.com'
+	},
+	data: {
+		userWallet: {
+			update: {
+				walletBalance: {
+					decrement: 1280
+				}
+			}
+		},
+		userWalletItem: {
+			create: {
+				type: 'debit',
+				amount: 1280,
+				description: ''
+			}
+		}
+	}
 }
 
 /***********************************
