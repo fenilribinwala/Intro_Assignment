@@ -1,6 +1,13 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User, UserWalletItem } from '@prisma/client'
 import process from 'process';
 const prisma = new PrismaClient()
+
+interface UserWithRelations extends User {
+	userWallet: {
+		walletBalance: number;
+	};
+	userWalletItem: UserWalletItem[];
+}
 
 /*  Part I
 	Input: array of Users
@@ -9,7 +16,7 @@ const prisma = new PrismaClient()
 function validateWalletItems(data: any): string[] {
 	const validation: string[] = []; 
 	//Write your code here
-	data.forEach((user: any) => {
+	data.forEach((user: UserWithRelations) => {
 		const { email, userWallet, userWalletItem } = user;
 		const credits = userWalletItem.filter((item: any) => item.type === 'credit').reduce((sum: number, item: any) => sum + item.amount, 0);
 		const debits = userWalletItem.filter((item: any) => item.type === 'debit').reduce((sum: number, item: any) => sum + item.amount, 0);
@@ -18,6 +25,7 @@ function validateWalletItems(data: any): string[] {
 			validation.push(email);
 		}
 	});
+	// this function returning [ 'alex@movingcompany.com' ]
 	return validation;
 }
 
@@ -26,9 +34,14 @@ function validateWalletItems(data: any): string[] {
 	Output: total admin cash given out in dollars (i.e. number)
  */
 function calculateAdminCash(data: any): number {
-	const totalAmount: number = 0;
+	let totalAmount: number = 0;
 	//Write your code here
-	return totalAmount;
+	data.forEach((user: UserWithRelations) => {
+		const adminCashItems = user.userWalletItem.filter(item => item.description === 'adminCash' && item.type === 'credit');
+		totalAmount += adminCashItems.reduce((sum, item) => sum + item.amount, 0);
+	})
+	// this function returning 45
+	return totalAmount / 100;
 }
 
 /*  Part III
