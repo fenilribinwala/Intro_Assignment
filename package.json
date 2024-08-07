@@ -10,7 +10,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "prisma": "^4.8.0"
+    "@types/node": "^22.1.0",
+    "prisma": "^4.16.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.5.4"
   },
   "dependencies": {
     "@prisma/client": "^4.8.0"

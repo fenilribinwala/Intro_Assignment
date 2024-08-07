@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import process from 'process';
 const prisma = new PrismaClient()
 
 /*  Part I
@@ -8,6 +9,15 @@ const prisma = new PrismaClient()
 function validateWalletItems(data: any): string[] {
 	const validation: string[] = []; 
 	//Write your code here
+	data.forEach((user: any) => {
+		const { email, userWallet, userWalletItem } = user;
+		const credits = userWalletItem.filter((item: any) => item.type === 'credit').reduce((sum: number, item: any) => sum + item.amount, 0);
+		const debits = userWalletItem.filter((item: any) => item.type === 'debit').reduce((sum: number, item: any) => sum + item.amount, 0);
+		const walletBalance = userWallet.walletBalance;
+		if (credits - debits !== walletBalance) {
+			validation.push(email);
+		}
+	});
 	return validation;
 }
 
